@@ -1,0 +1,11 @@
+{
+  "name": "chatapp-server",
+  "version": "0.0.1",
+  "description": "ChatApp server",
+  "main": "index.js",
+  "author": "Santiago David Garcia Quintero",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./index.js"
+  }
+}
