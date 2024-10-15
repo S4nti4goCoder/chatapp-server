@@ -5,7 +5,12 @@
   "main": "index.js",
   "author": "Santiago David Garcia Quintero",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "start": "node ./index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.1",
+    "socket.io": "^4.8.0"
   }
 }
