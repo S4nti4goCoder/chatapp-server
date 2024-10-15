@@ -1,5 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
+import cors from "cors";
 import http from "http";
 import { initSocketServer } from "./utils/index.js";
 
@@ -13,5 +14,8 @@ app.use(bodyParser.json());
 
 //Configure static folder
 app.use(express.static("uploads"));
+
+//Configure Header HTTP - CORS
+app.use(cors());
 
 export { server };
