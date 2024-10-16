@@ -1,5 +1,6 @@
 import bscrypt from "bcryptjs";
 import { User } from "../models/index.js";
+import { jwt } from "../utils/index.js";
 
 function register(req, res) {
   const { email, password } = req.body;
@@ -37,7 +38,10 @@ async function login(req, res) {
     if (!check) {
       return res.status(400).send({ msg: "Contraseña incorrecta" });
     } else {
-      return res.status(200).send(userStorage);
+      return res.status(200).send({
+        access: jwt.createAccessToken(userStorage),
+        refresh: jwt.createRefreshToken(userStorage),
+      });
     }
   } catch (error) {
     res.status(500).send({ msg: "Error del servidor" });
