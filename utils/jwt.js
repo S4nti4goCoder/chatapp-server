@@ -17,7 +17,7 @@ function createAccessToken(user) {
 
 function createRefreshToken(user) {
   const expToken = new Date();
-  expToken.getMonth(expToken.getMonth() + 1);
+  expToken.setMonth(expToken.getMonth() + 1);
 
   const payload = {
     token_type: "refresh",
@@ -33,8 +33,20 @@ function decoded(token) {
   return jsonwebtoken.decode(token, JWT_SECRET_KEY, true);
 }
 
+function hasExpiredToken(token) {
+  const { exp } = decoded(token);
+  const currentDate = new Date().getTime();
+
+  if (exp <= currentDate) {
+    return true;
+  }
+
+  return false;
+}
+
 export const jwt = {
   createAccessToken,
   createRefreshToken,
   decoded,
+  hasExpiredToken,
 };

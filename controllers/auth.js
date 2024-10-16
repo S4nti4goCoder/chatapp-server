@@ -48,7 +48,30 @@ async function login(req, res) {
   }
 }
 
+async function refreshAccessToken(req, res) {
+  const { refreshToken } = req.body;
+  if (!refreshToken) {
+    return res.status(400).send({ msg: "Token requerido" });
+  }
+
+  const hasExpired = jwt.hasExpiredToken(refreshToken);
+  if (hasExpired) {
+    return res.status(400).send({ msg: "Token expirado" });
+  }
+
+  const { user_id } = jwt.decoded(refreshToken);
+  try {
+    const userStorage = await User.findById(user_id);
+    return res.status(200).send({
+      accessToken: jwt.createAccessToken(userStorage),
+    });
+  } catch (error) {
+    return res.status(500).send({ msg: "Error del servidor" });
+  }
+}
+
 export const AuthController = {
   register,
   login,
+  refreshAccessToken,
 };
