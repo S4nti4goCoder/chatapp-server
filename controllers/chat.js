@@ -33,6 +33,24 @@ async function create(req, res) {
     });
 }
 
+async function getAll(req, res) {
+  const { user_id } = req.user;
+
+  Chat.find({
+    $or: [{ participant_one: user_id }, { participant_two: user_id }],
+  })
+    .populate("participant_one")
+    .populate("participant_two")
+    .then((chats) => {
+        //Obtener la fecha del ultimo mensaje de cada chat
+      res.status(200).send(chats);
+    })
+    .catch((error) => {
+      res.status(400).send({ msg: "Error al obtener los chats" });
+    });
+}
+
 export const ChatController = {
   create,
+  getAll,
 };
