@@ -6,4 +6,6 @@ import { mdAuth } from "../middlewares/index.js";
 const mdUploads = multiparty({ uploadDir: "./uploads/images" });
 const api = express.Router();
 
+api.post("/chat/message", [mdAuth.asureAuth], ChatMessageController.send);
+
 export const chatMessageRoutes = api;
