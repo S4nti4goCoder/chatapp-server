@@ -6,5 +6,6 @@ const api = express.Router();
 
 api.post("/chat", [mdAuth.asureAuth], ChatController.create);
 api.get("/chat", [mdAuth.asureAuth], ChatController.getAll);
+api.delete("/chat/:id", [mdAuth.asureAuth], ChatController.deleteChat);
 
 export const chatRoutes = api;

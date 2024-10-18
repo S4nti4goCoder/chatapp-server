@@ -42,7 +42,7 @@ async function getAll(req, res) {
     .populate("participant_one")
     .populate("participant_two")
     .then((chats) => {
-        //Obtener la fecha del ultimo mensaje de cada chat
+      //Obtener la fecha del ultimo mensaje de cada chat
       res.status(200).send(chats);
     })
     .catch((error) => {
@@ -50,7 +50,20 @@ async function getAll(req, res) {
     });
 }
 
+async function deleteChat(req, res) {
+  const chat_id = req.params.id;
+  
+  Chat.findByIdAndDelete(chat_id)
+  .then(() => {
+    res.status(200).send({ msg: "Chat eliminado" });
+  })
+  .catch((error) => {
+    res.status(400).send({ msg: "Error al eliminar el chat" });
+  });
+}
+
 export const ChatController = {
   create,
   getAll,
+  deleteChat,
 };
