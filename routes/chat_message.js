@@ -12,5 +12,10 @@ api.post(
   [mdAuth.asureAuth, mdUpload],
   ChatMessageController.sendImage
 );
+api.get(
+  "/chat/message/:chat_id",
+  [mdAuth.asureAuth],
+  ChatMessageController.getAll
+);
 
 export const chatMessageRoutes = api;

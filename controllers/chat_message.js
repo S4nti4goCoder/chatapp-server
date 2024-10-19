@@ -14,7 +14,7 @@ function sendText(req, res) {
 
   chat_message
     .save()
-    .then(() => chat_message.populate("user"))
+    .then(() => chat_message.populate("user", "-password"))
     .then((data) => {
       io.sockets.in(chat_id).emit("message", data);
       io.sockets.in(`${chat_id}_notify`).emit("message_notify", data);
@@ -38,7 +38,7 @@ function sendImage(req, res) {
 
   chat_message
     .save()
-    .then(() => chat_message.populate("user"))
+    .then(() => chat_message.populate("user", "-password"))
     .then((data) => {
       io.sockets.in(chat_id).emit("message", data);
       io.sockets.in(`${chat_id}_notify`).emit("message_notify", data);
@@ -49,7 +49,25 @@ function sendImage(req, res) {
     });
 }
 
+async function getAll(req, res) {
+  const { chat_id } = req.params;
+
+  try {
+    const messages = await ChatMessage.find({ chat: chat_id })
+      .sort({
+        createdAt: 1,
+      })
+      .populate("user", "-password");
+    const total = await ChatMessage.find({ chat: chat_id }).countDocuments();
+
+    res.status(200).send({ messages, total });
+  } catch (error) {
+    res.status(500).send({ msg: "Error del servidor" });
+  }
+}
+
 export const ChatMessageController = {
   sendText,
   sendImage,
+  getAll,
 };
