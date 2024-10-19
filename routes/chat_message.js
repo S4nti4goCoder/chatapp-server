@@ -17,5 +17,10 @@ api.get(
   [mdAuth.asureAuth],
   ChatMessageController.getAll
 );
+api.get(
+  "/chat/message/total/:chat_id",
+  [mdAuth.asureAuth],
+  ChatMessageController.getTotalMessages
+);
 
 export const chatMessageRoutes = api;
