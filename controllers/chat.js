@@ -1,4 +1,4 @@
-import { Chat } from "../models/index.js";
+import { Chat, ChatMessage } from "../models/index.js";
 
 async function create(req, res) {
   const { participant_id_one, participant_id_two } = req.body;
@@ -33,17 +33,31 @@ async function create(req, res) {
     });
 }
 
-async function getAll(req, res) {
+function getAll(req, res) {
   const { user_id } = req.user;
 
   Chat.find({
     $or: [{ participant_one: user_id }, { participant_two: user_id }],
   })
-    .populate("participant_one")
-    .populate("participant_two")
+    .populate("participant_one", "-password")
+    .populate("participant_two", "-password")
     .then((chats) => {
-      //Obtener la fecha del ultimo mensaje de cada chat
-      res.status(200).send(chats);
+      const arrayChats = [];
+
+      const promises = chats.map((chat) => {
+        return ChatMessage.findOne({ chat: chat._id })
+          .sort({ createdAt: -1 })
+          .then((response) => {
+            arrayChats.push({
+              ...chat._doc,
+              last_message_date: response?.createdAt || null,
+            });
+          });
+      });
+
+      Promise.all(promises).then(() => {
+        res.status(200).send(arrayChats);
+      });
     })
     .catch((error) => {
       res.status(400).send({ msg: "Error al obtener los chats" });
