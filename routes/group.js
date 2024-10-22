@@ -8,5 +8,6 @@ const mdUpload = multiparty({ uploadDir: "./uploads/group" });
 const api = express.Router();
 
 api.post("/group", [mdAuth.asureAuth, mdUpload], GroupController.create);
+api.get("/group", [mdAuth.asureAuth], GroupController.getAll);
 
 export const groupRoutes = api;

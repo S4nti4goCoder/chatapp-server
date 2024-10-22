@@ -25,6 +25,21 @@ function create(req, res) {
     });
 }
 
+function getAll(req, res) {
+  const { user_id } = req.user;
+
+  Group.find({ participants: user_id })
+    .populate("creator", "-password")
+    .populate("participants", "-password")
+    .then((groups) => {
+      res.status(200).send(groups);
+    })
+    .catch((error) => {
+      res.status(500).send({ msg: "Error al obtener los grupos", error });
+    });
+}
+
 export const GroupController = {
   create,
+  getAll,
 };
