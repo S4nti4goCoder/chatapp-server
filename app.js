@@ -9,6 +9,7 @@ import {
   userRoutes,
   chatRoutes,
   chatMessageRoutes,
+  groupRoutes,
 } from "./routes/index.js";
 
 const app = express();
@@ -33,5 +34,6 @@ app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", chatRoutes);
 app.use("/api", chatMessageRoutes);
+app.use("/api", groupRoutes);
 
 export { server };
