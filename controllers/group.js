@@ -39,7 +39,24 @@ function getAll(req, res) {
     });
 }
 
+function getGroup(req, res) {
+  const group_id = req.params.id;
+
+  Group.findById(group_id)
+    .populate("participants", "-password")
+    .then((groupStorage) => {
+      if (!groupStorage) {
+        return res.status(400).send({ msg: "No se ha encontrado el grupo" });
+      }
+      res.status(200).send(groupStorage);
+    })
+    .catch((error) => {
+      res.status(500).send({ msg: "Error del servidor" });
+    });
+}
+
 export const GroupController = {
   create,
   getAll,
+  getGroup,
 };
