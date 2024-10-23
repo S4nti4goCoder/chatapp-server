@@ -117,9 +117,28 @@ async function addParticipants(req, res) {
     participants: [...group.participants, ...users_id],
   };
 
-  await Group.findByIdAndUpdate(id, newData)
+  await Group.findByIdAndUpdate(id, newData);
 
-  res.status(200).send({msg: "Participantes añadidos correctamente"})
+  res.status(200).send({ msg: "Participantes añadidos correctamente" });
+}
+
+async function banParticipant(req, res) {
+  const { group_id, user_id } = req.body;
+
+  const group = await Group.findById(group_id);
+  console.log(group);
+
+  const newParticipants = group.participants.filter(
+    (participant) => participant.toString() !== user_id
+  );
+  const newData = {
+    ...group._doc,
+    participants: newParticipants,
+  };
+
+  await Group.findByIdAndUpdate(group_id, newData);
+
+  res.status(200).send({msg: "Baneo con exito"})
 }
 
 export const GroupController = {
@@ -129,4 +148,5 @@ export const GroupController = {
   updateGroup,
   exitGroup,
   addParticipants,
+  banParticipant,
 };
