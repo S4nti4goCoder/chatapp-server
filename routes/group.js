@@ -10,6 +10,11 @@ const api = express.Router();
 api.post("/group", [mdAuth.asureAuth, mdUpload], GroupController.create);
 api.get("/group", [mdAuth.asureAuth], GroupController.getAll);
 api.get("/group/:id", [mdAuth.asureAuth], GroupController.getGroup);
-api.patch("/group/:id", [mdAuth.asureAuth, mdUpload], GroupController.updateGroup);
+api.patch(
+  "/group/:id",
+  [mdAuth.asureAuth, mdUpload],
+  GroupController.updateGroup
+);
+api.patch("/group/exit/:id", [mdAuth.asureAuth], GroupController.exitGroup);
 
 export const groupRoutes = api;

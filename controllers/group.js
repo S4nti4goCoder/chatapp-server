@@ -80,9 +80,30 @@ async function updateGroup(req, res) {
     });
 }
 
+async function exitGroup(req, res) {
+  const { id } = req.params;
+  const { user_id } = req.user;
+
+  const group = await Group.findById(id);
+
+  const newParticipants = group.participants.filter(
+    (participant) => participant.toString() !== user_id
+  );
+
+  const newData = {
+    ...group._doc,
+    participants: newParticipants,
+  };
+
+  await Group.findByIdAndUpdate(id, newData);
+
+  res.status(200).send({ msg: "Salida existosa" });
+}
+
 export const GroupController = {
   create,
   getAll,
   getGroup,
   updateGroup,
+  exitGroup,
 };
