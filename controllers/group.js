@@ -35,7 +35,7 @@ function getAll(req, res) {
       res.status(200).send(groups);
     })
     .catch((error) => {
-      res.status(500).send({ msg: "Error al obtener los grupos", error });
+      res.status(500).send({ msg: "Error al obtener los grupos" });
     });
 }
 
@@ -55,8 +55,34 @@ function getGroup(req, res) {
     });
 }
 
+async function updateGroup(req, res) {
+  const { id } = req.params;
+  const { name } = req.body;
+
+  const group = await Group.findById(id);
+
+  if (name) group.name = name;
+
+  if (req.files.image) {
+    const imagePath = getFilePath(req.files.image);
+    group.image = imagePath;
+  }
+
+  Group.findByIdAndUpdate(id, group, { new: true })
+    .then((updatedGroup) => {
+      res
+        .status(200)
+        .send({ image: updatedGroup.image, name: updatedGroup.name });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send({ msg: "Error del servidor" });
+    });
+}
+
 export const GroupController = {
   create,
   getAll,
   getGroup,
+  updateGroup,
 };
