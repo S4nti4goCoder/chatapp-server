@@ -138,7 +138,7 @@ async function banParticipant(req, res) {
 
   await Group.findByIdAndUpdate(group_id, newData);
 
-  res.status(200).send({msg: "Baneo con exito"})
+  res.status(200).send({ msg: "Baneo con exito" });
 }
 
 export const GroupController = {

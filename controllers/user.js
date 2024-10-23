@@ -1,4 +1,4 @@
-import { User } from "../models/index.js";
+import { Group, User } from "../models/index.js";
 import { getFilePath } from "../utils/index.js";
 
 async function getMe(req, res) {
@@ -66,9 +66,28 @@ async function updateUser(req, res) {
     });
 }
 
+async function getUsersExeptParticipantsGroup(req, res) {
+  const { group_id } = req.params;
+
+  const group = await Group.findById(group_id);
+  const participantsString = group.participants.toString();
+  const participants = participantsString.split(",");
+
+  const response = await User.find({ _id: { $nin: participants } }).select([
+    "-password",
+  ]);
+
+  if (!response) {
+    res.status(400).send({ msg: "No se ha encontrado ningun usuario" });
+  } else {
+    res.status(200).send(response);
+  }
+}
+
 export const UserController = {
   getMe,
   getUsers,
   getUser,
   updateUser,
+  getUsersExeptParticipantsGroup,
 };
