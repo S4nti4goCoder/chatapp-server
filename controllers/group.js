@@ -1,4 +1,4 @@
-import { Group, User } from "../models/index.js";
+import { User, Group, GroupMessage } from "../models/index.js";
 import { getFilePath } from "../utils/index.js";
 
 function create(req, res) {
@@ -31,8 +31,19 @@ function getAll(req, res) {
   Group.find({ participants: user_id })
     .populate("creator", "-password")
     .populate("participants", "-password")
-    .then((groups) => {
-      res.status(200).send(groups);
+    .then(async (groups) => {
+      const arrayGroups = [];
+
+      for (const group of groups) {
+        const response = await GroupMessage.findOne({ group: group._id }).sort({
+          createdAt: -1,
+        });
+        arrayGroups.push({
+          ...group._doc,
+          last_message_date: response?.createdAt || null,
+        });
+      }
+      res.status(200).send(arrayGroups);
     })
     .catch((error) => {
       res.status(500).send({ msg: "Error al obtener los grupos" });
