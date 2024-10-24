@@ -52,7 +52,22 @@ function sendImage(req, res) {
     });
 }
 
+async function getAll(req, res) {
+  const { group_id } = req.params;
+
+  try {
+    const messages = await GroupMessage.find({ group: group_id })
+      .sort({ createdAt: 1 })
+      .populate("user", "-password");
+    const total = await GroupMessage.find({ group: group_id }).countDocuments();
+    res.status(200).send({ messages, total });
+  } catch (error) {
+    res.status(500).send({ msg: "Error del servidor" });
+  }
+}
+
 export const GroupMessageController = {
   sendText,
   sendImage,
+  getAll,
 };

@@ -13,5 +13,10 @@ api.post(
   [mdAuth.asureAuth, mdUpload],
   GroupMessageController.sendImage
 );
+api.get(
+  "/group/message/:group_id",
+  [mdAuth.asureAuth],
+  GroupMessageController.getAll
+);
 
 export const groupMessageRoutes = api;
