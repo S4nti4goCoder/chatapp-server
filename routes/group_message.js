@@ -18,5 +18,10 @@ api.get(
   [mdAuth.asureAuth],
   GroupMessageController.getAll
 );
+api.get(
+  "/group/message/total/:group_id",
+  [mdAuth.asureAuth],
+  GroupMessageController.getTotalMessages
+);
 
 export const groupMessageRoutes = api;
