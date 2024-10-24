@@ -23,5 +23,10 @@ api.get(
   [mdAuth.asureAuth],
   GroupMessageController.getTotalMessages
 );
+api.get(
+    "/group/message/last/:group_id",
+    [mdAuth.asureAuth],
+    GroupMessageController.getLastMessage
+  );
 
 export const groupMessageRoutes = api;
